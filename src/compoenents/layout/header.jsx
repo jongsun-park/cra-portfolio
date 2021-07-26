@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Inner } from "../container";
 import { routes } from "../../data";
+import { NavLink } from "react-router-dom";
 
 const Navigation = ({ routes }) => {
   return (
@@ -8,7 +9,13 @@ const Navigation = ({ routes }) => {
       <ul className="header__navigation__container">
         {routes.map((route) => (
           <li key={route.name} className="header__navigation__item">
-            <a href={route.slug}>{route.name}</a>
+            <NavLink
+              exact={route.slug === "/" ? true : false}
+              to={route.slug}
+              activeClassName="active"
+            >
+              {route.name}
+            </NavLink>
           </li>
         ))}
       </ul>
@@ -18,8 +25,12 @@ const Navigation = ({ routes }) => {
 
 export const Header = () => (
   <HeaderContainer className="header">
-    <Inner className="flex">
-      <div className="site-title">Jongsun Park</div>
+    <Inner className="flex my-0">
+      <a href="/">
+        <div className="site-title">
+          <strong>Jongsun Park</strong>
+        </div>
+      </a>
       <Navigation routes={routes} className="header__navigation" />
     </Inner>
   </HeaderContainer>
@@ -34,6 +45,9 @@ const HeaderContainer = styled.header`
     }
     &__item {
       margin-left: 1rem;
+      .active {
+        font-weight: bold;
+      }
     }
   }
 `;

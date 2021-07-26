@@ -1,14 +1,7 @@
 import Layout from "./compoenents/layout";
-import { Home, PageNotFound, Blog } from "./pages";
+import { Home, PageNotFound, BlogList, Blog, CV, Projects } from "./pages";
 import "./App.scss";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import fs from "fs";
-
-// import listReactFiles from "list-react-files";
-
-// listReactFiles(__dirname).then((files) => console.log(files));
-// need eject
-console.log(fs);
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const App = () => {
   return (
@@ -16,7 +9,14 @@ const App = () => {
       <Layout>
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/blog" component={Blog} />
+          <Route path="/blog" exact component={BlogList} />
+          <Route path="/blog/:id" component={Blog} />
+          <Route
+            path={["/project/", "/project/:id"]}
+            exact
+            component={Projects}
+          />
+          <Route path="/cv" component={CV} />
           <Route component={PageNotFound} />
         </Switch>
       </Layout>

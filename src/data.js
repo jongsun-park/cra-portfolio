@@ -1,8 +1,8 @@
 export const routes = [
   { name: "Home", slug: "/" },
-  { name: "CV", slug: "/cv" },
-  { name: "Projects", slug: "/projects" },
   { name: "Blog", slug: "/blog" },
+  { name: "Project", slug: "/project" },
+  { name: "CV", slug: "/cv" },
 ];
 
 export const contacts = [

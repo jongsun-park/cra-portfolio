@@ -38,7 +38,7 @@ const FooterCopy = () => (
 
 export const Footer = () => (
   <FooterContainer className="footer">
-    <Inner className="footer__container flex">
+    <Inner className="footer__container flex my-0">
       <FooterContact contacts={contacts} />
       <FooterCopy />
     </Inner>
