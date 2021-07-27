@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { client } from "../api/contentful";
 import { Button } from "../compoenents/button";
 import { Inner } from "../compoenents/container";
+import { colors } from "../styles/colors";
 
 const Project = ({ id }) => {
   const [project, setProject] = useState({});
@@ -73,13 +74,13 @@ export const Projects = (props) => {
     const { id } = project.sys;
     const { title } = project.fields;
     return (
-      <li
+      <span
         key={id}
         onClick={() => setSelectedId(id)}
         className={`project_list__link ${id === selectedId ? "selected" : ""}`}
       >
         {title}
-      </li>
+      </span>
     );
   });
 
@@ -103,33 +104,67 @@ const ProjectsContainer = styled.div`
   @media (max-width: 600px) {
     flex-direction: column;
   }
+
   .project__list {
     min-width: 30%;
     position: sticky;
     top: 1rem;
-    margin-bottom: 1rem;
+    margin: 0 2rem 1rem 0;
+
     @media (max-width: 600px) {
       position: unset;
+      border-bottom: 1px solid #eee;
+      width: 100%;
     }
 
     .project_list__link {
       margin-bottom: 10px;
       cursor: pointer;
       &:hover {
-        color: blue;
+        color: ${colors.primary};
       }
+
+      position: relative;
+      display: block;
+      padding: 10px;
+
+      transition: color ease-out 100ms;
+
+      &::after {
+        content: "";
+        position: absolute;
+
+        content: "";
+        position: absolute;
+        width: 100%;
+
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: -1;
+
+        transition: background ease-out 300ms;
+      }
+
       &.selected {
-        font-weight: bold;
+        color: white;
+        &::after {
+          background: ${colors.primary};
+        }
       }
     }
   }
   .project__container {
     padding: 1rem;
-    background: #eee;
     text-align: center;
+
+    @media (max-width: 600px) {
+      padding: 0;
+    }
+
     .project__fullpage {
       max-width: 100%;
-      background-blend-mode: overlay;
+      margin: 1rem;
     }
   }
 `;

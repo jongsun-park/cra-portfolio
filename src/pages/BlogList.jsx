@@ -6,37 +6,87 @@ import { toLocaleDateString, cleanString } from "../utils";
 
 import styled from "styled-components";
 
-// import { useEffect } from "react";
+import { Button } from "../compoenents/button";
+import { colors } from "../styles/colors";
+
+const Pagination = ({ num = 0, page, perPage, setPage }) => {
+  const size = num !== 0 ? Math.ceil(num / perPage - 1) : 0;
+  if (!size || size <= 0) return "";
+
+  return (
+    <PaginationContainer className="blog-pagination">
+      {new Array(size).fill("").map((_, index) => (
+        <li
+          className={`blog-pagination__button ${
+            index === page ? "active" : ""
+          }`}
+          onClick={() => setPage(index)}
+        >
+          {index + 1}
+        </li>
+      ))}
+    </PaginationContainer>
+  );
+};
+
+const PaginationContainer = styled.div`
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto;
+  .blog-pagination__button {
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #eee;
+    color: ${colors.default_light};
+    width: 14px;
+    height: 14px;
+    font-size: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+    &.active,
+    &:hover {
+      border: 1px solid ${colors.default};
+      background: ${colors.default}!important;
+      color: white;
+    }
+  }
+`;
 
 export const BlogList = () => {
   const [blog, setBlog] = useState([]);
+  const [page, setPage] = useState(0);
+  const perPage = 2;
+
   useEffect(() => {
     const getEntries = async () => {
       const res = await client.getEntries();
-      if (res.items.length > 0) setBlog(res.items);
+      if (res.items.length > 0)
+        setBlog(
+          res.items.filter((item) => item.sys.contentType.sys.id === "blog")
+        );
     };
     getEntries();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(blog);
-  // }, [blog]);
-
   return (
     <div>
       <Inner>
-        <h2>Blog</h2>
+        <h1 className="page-title">Blog</h1>
+        <p>{blog.length} Posts found</p>
         <div className="blog__list">
-          {blog.map((item) => {
+          {blog.slice(page * perPage, (page + 1) * perPage).map((item) => {
             const { title, body } = item.fields;
-            const { createdAt, id, contentType } = item.sys;
-
-            if (contentType.sys.id !== "blog") return "";
-
+            const { createdAt, id } = item.sys;
+            // if (contentType.sys.id !== "blog") return "";
             return (
               <BlogItemContainer className="blog__item" key={id}>
                 <h3>{title}</h3>
-                <span>{toLocaleDateString(createdAt)}</span>{" "}
+                <span>
+                  <small>{toLocaleDateString(createdAt)}</small>
+                </span>{" "}
                 <div>
                   {body &&
                     (renderedBody(body).length > 200 ? (
@@ -54,22 +104,27 @@ export const BlogList = () => {
                       />
                     ))}
                 </div>
-                <a href={`/blog/${id}`}>Read More</a>
+                <Button href={`/blog/${id}`}>Read More</Button>
               </BlogItemContainer>
             );
           })}
         </div>
+
+        <Pagination
+          num={blog.length}
+          page={page}
+          perPage={perPage}
+          setPage={setPage}
+        />
       </Inner>
     </div>
   );
 };
 
 const BlogItemContainer = styled.div`
-  padding: 1rem;
+  padding: 1rem 0;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
-  h3 {
-  }
   .blog__excerpt {
     position: relative;
     &::after {

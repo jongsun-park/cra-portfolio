@@ -1,6 +1,109 @@
-// Global SCSS
+/*
+ * Global Style sheet
+ */
 
+// import
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;1,400&display=swap");
+@import "./styles/nomarlize.css";
+
+// variables
+$body-font: "Nunito", sans-serif;
+$colors_primary: #f0970b;
+$colors_primary_light: #ffe2b5;
+$colors_primary_dark: #895606;
+$colors_default: #0f0900;
+
+// font
+body {
+  font-family: $body-font;
+  line-height: 1.4;
+}
+
+// link style
+html,
 a {
   color: initial;
   text-decoration: none;
+}
+
+.link-hover-animation {
+  display: inline-block;
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 3px;
+    background: $colors_default;
+    transition: all ease-out 300ms;
+  }
+  &:hover {
+    &:after {
+      width: 100%;
+    }
+  }
+}
+
+// layout
+html,
+body,
+#root {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  main {
+    flex: 1;
+  }
+}
+
+// scroll behavior
+body {
+  scroll-behavior: smooth;
+}
+
+// show right scroll bar always show
+#root {
+  overflow: hidden scroll;
+}
+
+// util class
+.sm-hidden {
+  @media (max-width: 450px) {
+    display: none;
+  }
+}
+
+// homepage
+.homepate-section__title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  position: relative;
+  span {
+    background: white;
+    padding-right: 1rem;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: #eee;
+    top: 50%;
+    left: 0;
+    z-index: -1;
+  }
+}
+
+// Page class
+.page-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+}
+
+// selection style
+
+::selection {
+  background-color: $colors_primary;
+  color: white;
 }

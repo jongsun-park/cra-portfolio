@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Inner = styled.div`
   max-width: 960px;
   margin: 1rem auto;
-  padding: 20px;
+  padding: 1rem;
 
   @media (max-width: 600px) {
     margin: 0 auto;

@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { Inner } from "../container";
 import { contacts } from "../../data";
+import { colors } from "../../styles/colors";
 
 const FooterContact = ({ contacts }) => (
   <div className="footer-contact">
-    <p>
+    <p className="footer-contact__promotion">
       Do you have a project? <br />
-      Let's work together!
+      Let's work <ins>together</ins>!
     </p>
     <div className="footer-contact__links">
       {contacts.map((item) => (
@@ -50,19 +51,35 @@ const FooterContainer = styled.footer`
   .footer__container {
     display: flex;
     align-items: flex-end;
+
+    @media (max-width: 500px) {
+      flex-direction: column;
+      align-items: start;
+      .footer-contact__links {
+        margin-bottom: 0;
+      }
+    }
   }
+
   .footer-contact {
+    &__promotion {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
     &__links {
       margin-bottom: 1rem;
       display: flex;
     }
     &__link {
-      display: block;
-      min-width: 16px;
-      min-height: 16px;
-      margin-right: 5px;
-    }
-    &__link-icon {
+      padding: 10px;
+      display: inline-flex;
+      border: 2px solid ${colors.default_light};
+      border-radius: 99px;
+      margin-right: 10px;
+
+      &:hover {
+        border-color: ${colors.default};
+      }
     }
   }
 `;
