@@ -4,20 +4,24 @@ import { useEffect, useState } from "react";
 import { toLocaleDateString, shuffle } from "../utils";
 import styled from "styled-components";
 import { colors } from "../styles/colors";
+// import { ScrollContainer } from "../compoenents/scrollContainer";
 
 const PostTemplate = ({ post }) => {
   const { title, body } = post.fields;
   const { createdAt } = post.sys;
+
   return (
+    // <ScrollContainer>
     <div className="post">
-      <h1 class="post__title">{title}</h1>
-      <span class="post__publishedAt">
+      <h1 className="post__title">{title}</h1>
+      <span className="post__publishedAt">
         <small>{toLocaleDateString(createdAt)}</small>
       </span>
-      <div class="post__content">
+      <div className="post__content">
         <div dangerouslySetInnerHTML={{ __html: renderedBody(body) }}></div>
       </div>
     </div>
+    // </ScrollContainer>
   );
 };
 
@@ -57,11 +61,14 @@ const PostNavigation = ({ contentType, current }) => {
 
 export const Blog = ({ match }) => {
   const { id } = match.params;
+
   const postInit = {
     fields: { title: "", body: "" },
     sys: { createdAt: "", contentType: { sys: { id: "" } } },
   };
+
   const [post, setPost] = useState(postInit);
+
   useEffect(() => {
     const getPost = async (id) => {
       const fetched = await client.getEntry(id);
@@ -69,6 +76,26 @@ export const Blog = ({ match }) => {
     };
     getPost(id);
   }, [id]);
+
+  // inline code styles change
+  useEffect(() => {
+    const codeEls = document.querySelectorAll("code");
+    codeEls.forEach((code) => {
+      if (code.innerText.length < 50) {
+        code.classList.add("inline-code");
+      }
+    });
+  }, [post]);
+
+  // empty p tag remove
+  useEffect(() => {
+    const paras = document.querySelectorAll("p");
+    paras.forEach((para) => {
+      if (para.innerHTML === "&nbsp;") {
+        para.classList.add("empty-para");
+      }
+    });
+  }, [post]);
 
   return (
     <PostContainer>
@@ -90,6 +117,14 @@ const PostContainer = styled.div`
       padding: 1rem;
       font-size: 14px;
       margin: 1rem auto;
+
+      p {
+        line-height: 1.5;
+        &.empty-para {
+          display: none;
+        }
+      }
+
       code {
         font-family: monospace;
         width: 100%;
@@ -100,6 +135,13 @@ const PostContainer = styled.div`
         word-break: break-word;
         color: white;
         white-space: pre-wrap;
+
+        &.inline-code {
+          background: none;
+          color: ${colors.primary};
+          padding: 0;
+          display: inline;
+        }
       }
     }
   }

@@ -3,6 +3,7 @@ import { Inner } from "../container";
 import { routes } from "../../data";
 import { NavLink } from "react-router-dom";
 import { colors } from "../../styles/colors";
+import { motion } from "framer-motion";
 
 const Navigation = ({ routes }) => {
   return (
@@ -24,18 +25,31 @@ const Navigation = ({ routes }) => {
   );
 };
 
-export const Header = () => (
-  <HeaderContainer className="header">
-    <Inner className="flex my-0">
-      <a href="/">
-        <div className="site-title">
-          <strong>Jongsun Park</strong>
-        </div>
-      </a>
-      <Navigation routes={routes} className="header__navigation" />
-    </Inner>
-  </HeaderContainer>
-);
+export const Header = () => {
+  const variants = {
+    hidden: { opacity: 0, y: -100 },
+    visible: { opacity: 1, y: 0 },
+  };
+  return (
+    <HeaderContainer
+      className="header"
+      as={motion.div}
+      initial="hidden"
+      animate="visible"
+      transition={{ duration: 0.5 }}
+      variants={variants}
+    >
+      <Inner className="flex my-0">
+        <a href="/">
+          <div className="site-title">
+            <strong>Jongsun Park</strong>
+          </div>
+        </a>
+        <Navigation routes={routes} className="header__navigation" />
+      </Inner>
+    </HeaderContainer>
+  );
+};
 
 const HeaderContainer = styled.header`
   margin: 10px auto;
@@ -43,6 +57,18 @@ const HeaderContainer = styled.header`
 
   .site-title {
     font-size: 1.4rem;
+    position: relative;
+    &::after {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 5px;
+      left: 0;
+      top: 5px;
+    }
+    &:hover {
+      color: ${colors.primary};
+    }
   }
   .header__navigation {
     &__container {

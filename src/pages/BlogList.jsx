@@ -9,6 +9,8 @@ import styled from "styled-components";
 import { Button } from "../compoenents/button";
 import { colors } from "../styles/colors";
 
+import { ScrollContainer } from "../compoenents/scrollContainer";
+
 const Pagination = ({ num = 0, page, perPage, setPage }) => {
   const size = num !== 0 ? Math.ceil(num / perPage - 1) : 0;
   if (!size || size <= 0) return "";
@@ -21,6 +23,7 @@ const Pagination = ({ num = 0, page, perPage, setPage }) => {
             index === page ? "active" : ""
           }`}
           onClick={() => setPage(index)}
+          key={`pagination-${index}`}
         >
           {index + 1}
         </li>
@@ -58,7 +61,7 @@ const PaginationContainer = styled.div`
 export const BlogList = () => {
   const [blog, setBlog] = useState([]);
   const [page, setPage] = useState(0);
-  const perPage = 2;
+  const perPage = 5;
 
   useEffect(() => {
     const getEntries = async () => {
@@ -83,28 +86,32 @@ export const BlogList = () => {
             // if (contentType.sys.id !== "blog") return "";
             return (
               <BlogItemContainer className="blog__item" key={id}>
-                <h3>{title}</h3>
-                <span>
-                  <small>{toLocaleDateString(createdAt)}</small>
-                </span>{" "}
-                <div>
-                  {body &&
-                    (renderedBody(body).length > 200 ? (
-                      <div
-                        className="blog__excerpt"
-                        dangerouslySetInnerHTML={{
-                          __html: cleanString(renderedBody(body).slice(0, 200)),
-                        }}
-                      />
-                    ) : (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: renderedBody,
-                        }}
-                      />
-                    ))}
-                </div>
-                <Button href={`/blog/${id}`}>Read More</Button>
+                <ScrollContainer>
+                  <h3>{title}</h3>
+                  <span>
+                    <small>{toLocaleDateString(createdAt)}</small>
+                  </span>{" "}
+                  <div>
+                    {body &&
+                      (renderedBody(body).length > 200 ? (
+                        <div
+                          className="blog__excerpt"
+                          dangerouslySetInnerHTML={{
+                            __html: cleanString(
+                              renderedBody(body).slice(0, 200)
+                            ),
+                          }}
+                        />
+                      ) : (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: renderedBody,
+                          }}
+                        />
+                      ))}
+                  </div>
+                  <Button href={`/blog/${id}`}>Read More</Button>
+                </ScrollContainer>
               </BlogItemContainer>
             );
           })}

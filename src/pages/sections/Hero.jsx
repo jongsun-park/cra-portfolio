@@ -1,24 +1,53 @@
 import styled from "styled-components";
 import { contacts } from "../../data";
 import { Button } from "../../compoenents/button";
+import { motion } from "framer-motion";
 
 export const Hero = () => {
+  const container = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.5 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
   return (
     <HeroContaienr>
-      <div className="homepage-hero__content">
-        <h2 className="intro">
+      <motion.div
+        className="homepage-hero__content"
+        initial="hidden"
+        animate="visible"
+        variants={container}
+        transition={{ duration: 1 }}
+      >
+        <motion.h2 className="intro" variants={item}>
           Hello! I'm <em>Park</em>
-        </h2>
-        <p className="short-desc">
+        </motion.h2>
+        <motion.p className="short-desc" variants={item}>
           Web developer and designer specialized in UI & UX in mordern web.
-        </p>
-        <p className="long-desc">
+        </motion.p>
+        <motion.p className="long-desc" variants={item}>
           I come from Daegu, a city in South Korea. I currently live in Ireland,
           in County Louth. I'm a self-taught web designer/developer and I'm
           highly capable working with both wordpress and shopify. (As well as
           custom coded pages!)
-        </p>
-        <div className="cta">
+        </motion.p>
+        <motion.div className="cta" variants={item}>
           <Button
             href="/Jongsun Park CV.pdf"
             downlaod="Jongsun Park"
@@ -36,15 +65,21 @@ export const Hero = () => {
             />
             <span className="sm-hidden">&nbsp;CONTACT</span>
           </Button>
-        </div>
-      </div>
-      <div className="homepage-hero__image">
+        </motion.div>
+      </motion.div>
+      <motion.div
+        className="homepage-hero__image"
+        initial="hidden"
+        animate="visible"
+        variants={imageVariants}
+        transition={{ duration: 0.5 }}
+      >
         <img
           src="/images/main-inllustration.svg"
           alt="hero-illustration"
           loading="lazy"
         />
-      </div>
+      </motion.div>
     </HeroContaienr>
   );
 };

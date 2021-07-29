@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Inner } from "../container";
 import { contacts } from "../../data";
 import { colors } from "../../styles/colors";
+import { motion } from "framer-motion";
 
 const FooterContact = ({ contacts }) => (
   <div className="footer-contact">
@@ -11,12 +12,14 @@ const FooterContact = ({ contacts }) => (
     </p>
     <div className="footer-contact__links">
       {contacts.map((item) => (
-        <a
+        <motion.a
           href={item.href}
           target="__blank"
           rel="noreferrer noopener"
           className="footer-contact__link"
           key={item.text}
+          whileHover={{ scale: 1.1, backgroundColor: colors.default }}
+          whileTap={{ scale: 0.9 }}
         >
           {item.icon ? (
             <img
@@ -27,7 +30,7 @@ const FooterContact = ({ contacts }) => (
           ) : (
             item.text
           )}
-        </a>
+        </motion.a>
       ))}
     </div>
   </div>
@@ -38,7 +41,13 @@ const FooterCopy = () => (
 );
 
 export const Footer = () => (
-  <FooterContainer className="footer">
+  <FooterContainer
+    className="footer"
+    as={motion.footer}
+    initial={{ opacity: 0, y: "100%" }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 1 }}
+  >
     <Inner className="footer__container flex my-0">
       <FooterContact contacts={contacts} />
       <FooterCopy />
@@ -47,10 +56,20 @@ export const Footer = () => (
 );
 
 const FooterContainer = styled.footer`
-  background: #eee;
+  background: ${colors.bg_dark};
+  color: white;
   .footer__container {
     display: flex;
     align-items: flex-end;
+
+    .footer-contact__links {
+      .footer-contact__link {
+        border-color: white;
+        img {
+          filter: invert(1);
+        }
+      }
+    }
 
     @media (max-width: 500px) {
       flex-direction: column;

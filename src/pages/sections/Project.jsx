@@ -2,41 +2,54 @@ import styled from "styled-components";
 import { toLocaleDateString } from "../../utils";
 import { Button } from "../../compoenents/button";
 
+import { ScrollContainer } from "../../compoenents/scrollContainer";
+import { motion } from "framer-motion";
+
 export const Project = ({ project }) => {
   return (
-    <ProjectContainer>
+    <ProjectContainer
+      as={motion.div}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
       <h2 className="homepate-section__title">
         <span>Projects</span>
       </h2>
+      {/* <ScrollContainer>Scroll Animation Testing</ScrollContainer> */}
       <div className="homepage-project">
         {project.map((p, i) => {
           const { title, description, thumbnail, url } = p.fields;
           const { id, createdAt } = p.sys;
           return (
-            <div
-              key={id + i}
-              className={`homepage-project__item ${
-                i % 2 !== 0 ? "flex-reverse" : ""
-              }`}
-            >
+            <ScrollContainer key={id + i}>
               <div
-                className="homepage-project__image"
-                style={{ backgroundImage: `url(${thumbnail.fields.file.url})` }}
-              ></div>
-              <div className="homepage-project__content">
-                <h3>{title}</h3>
-                <span>
-                  <small>{toLocaleDateString(createdAt)}</small>
-                </span>
-                <p>{description}</p>
-                <div className="buttons">
-                  <Button primary href={url} target="_blank" rel="noreferrer">
-                    Live Website
-                  </Button>
-                  <Button href={`/project/${id}`}>Details</Button>
+                className={`homepage-project__item ${
+                  i % 2 !== 0 ? "flex-reverse" : ""
+                }`}
+                initial="hidden"
+                animate="visible"
+              >
+                <div
+                  className="homepage-project__image"
+                  style={{
+                    backgroundImage: `url(${thumbnail.fields.file.url})`,
+                  }}
+                ></div>
+                <div className="homepage-project__content">
+                  <h3>{title}</h3>
+                  <span>
+                    <small>{toLocaleDateString(createdAt)}</small>
+                  </span>
+                  <p>{description}</p>
+                  <div className="buttons">
+                    <Button primary href={url} target="_blank" rel="noreferrer">
+                      Live Website
+                    </Button>
+                    <Button href={`/project/${id}`}>Details</Button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </ScrollContainer>
           );
         })}
       </div>

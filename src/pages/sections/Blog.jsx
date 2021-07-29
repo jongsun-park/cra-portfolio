@@ -4,23 +4,30 @@ import { toLocaleDateString } from "../../utils";
 import { Button } from "../../compoenents/button";
 import { shuffle } from "../../utils";
 import { colors } from "../../styles/colors";
+import { motion } from "framer-motion";
 
 export const Blog = ({ blog, limit }) => {
   return (
-    <BlogContainer className="homepage-blog">
+    <BlogContainer
+      className="homepage-blog"
+      as={motion.div}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
       <h2 className="homepate-section__title">
         <span>Blog</span>
       </h2>
-
       <div className="homepage-blog__container">
         {shuffle(blog)
           .slice(0, limit)
           .map((item, index) => {
             return (
-              <a
+              <motion.a
                 className="homepage-blog__item"
                 href={`/blog/${item.sys.id}`}
                 key={item.sys.id + index}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <h3 className="title">{item.fields.title}</h3>
                 <p className="meta">
@@ -30,7 +37,7 @@ export const Blog = ({ blog, limit }) => {
                     {toLocaleDateString(item.sys.createdAt)}
                   </span>
                 </p>
-              </a>
+              </motion.a>
             );
           })}
       </div>

@@ -4,4 +4,5 @@ export const colors = {
   primary_dark: "#895606",
   default: "#0F0900",
   default_light: "#AAA8A5",
+  bg_dark: "#212121",
 };

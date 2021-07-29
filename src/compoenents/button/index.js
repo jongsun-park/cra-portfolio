@@ -1,7 +1,8 @@
 import styled, { css } from "styled-components";
 import { colors } from "../../styles/colors";
+import { motion } from "framer-motion";
 
-export const Button = styled.a`
+export const PlainButton = styled.a`
   font-size: 10px;
   font-weight: bold;
   text-transport: 
@@ -18,6 +19,7 @@ export const Button = styled.a`
   &:hover {
     background: ${colors.default};
     border: 1px solid  ${colors.default};
+    box-shadow: 0rem 10px 14px rgb(0 0 0 / 5%);
     color: white;
     img.icon {
       filter: invert(1);
@@ -30,3 +32,12 @@ export const Button = styled.a`
       color: white;
     `}
 `;
+
+export const Button = (props) => (
+  <PlainButton
+    {...props}
+    as={motion.a}
+    whileHover={{ scale: 1.1 }}
+    whileTap={{ scale: 0.9 }}
+  />
+);

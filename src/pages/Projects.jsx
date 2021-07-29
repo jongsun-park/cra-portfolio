@@ -1,5 +1,6 @@
 // Project List Componenet
 
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { client } from "../api/contentful";
@@ -9,11 +10,15 @@ import { colors } from "../styles/colors";
 
 const Project = ({ id }) => {
   const [project, setProject] = useState({});
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
+    setVisible(false);
     const getEntry = async (id) => {
       try {
         const res = await client.getEntry(id);
         setProject(res);
+        setVisible(true);
       } catch (err) {
         console.log(err);
       }
@@ -21,23 +26,46 @@ const Project = ({ id }) => {
     getEntry(id);
   }, [id]);
 
+  const variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -40 },
+  };
+
   if (!project || !project.fields) {
-    return <div>Not found</div>;
+    return (
+      <div className="project__not-found">
+        <h2>Not found</h2>
+        <p>Please select any items in the list</p>
+      </div>
+    );
   }
 
   return (
-    <div className="project__container">
-      <h1 className="project__title">{project.fields.title}</h1>
-      <p className="project__description">{project.fields.description}</p>
-      <Button href={project.fieldsurl} target="_blank" rel="noreferrer">
-        Live Website
-      </Button>
-      <img
-        src={project.fields.fullpage.fields.file.url}
-        alt={project.fields.fullpage.fields.title}
-        className="project__fullpage"
-      />
-    </div>
+    <AnimatePresence exitBeforeEnter>
+      {visible && (
+        <motion.div
+          className="project__container"
+          variants={variants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          transition={{ duration: 0.5 }}
+          key={id}
+        >
+          <h1 className="project__title">{project.fields.title}</h1>
+          <p className="project__description">{project.fields.description}</p>
+          <Button href={project.fieldsurl} target="_blank" rel="noreferrer">
+            Live Website
+          </Button>
+          <img
+            src={project.fields.fullpage.fields.file.url}
+            alt={project.fields.fullpage.fields.title}
+            className="project__fullpage"
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
@@ -124,39 +152,27 @@ const ProjectsContainer = styled.div`
         color: ${colors.primary};
       }
 
-      position: relative;
       display: block;
-      padding: 10px;
-
       transition: color ease-out 100ms;
 
-      &::after {
-        content: "";
-        position: absolute;
-
-        content: "";
-        position: absolute;
-        width: 100%;
-
-        top: 0;
-        left: 0;
-        height: 100%;
-        z-index: -1;
-
-        transition: background ease-out 300ms;
-      }
-
       &.selected {
-        color: white;
-        &::after {
-          background: ${colors.primary};
-        }
+        text-decoration: underline;
+        text-underline-offset: 10%;
+        color: ${colors.primary};
       }
     }
   }
+
+  .project__not-found {
+    width: 100%;
+    text-align: center;
+    height: 100%;
+  }
+
   .project__container {
     padding: 1rem;
     text-align: center;
+    min-height: calc(100vh - 84px);
 
     @media (max-width: 600px) {
       padding: 0;
