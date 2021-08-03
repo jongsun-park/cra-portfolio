@@ -55,7 +55,7 @@ const Project = ({ id }) => {
         >
           <h1 className="project__title">{project.fields.title}</h1>
           <p className="project__description">{project.fields.description}</p>
-          <Button href={project.fieldsurl} target="_blank" rel="noreferrer">
+          <Button href={project.fields.url} target="_blank" rel="noreferrer">
             Live Website
           </Button>
           <img

@@ -12,7 +12,7 @@ export const InstagramFeed = ({ posts, limit }) => {
           rel="noreferrer"
           className="link-hover-animation"
         >
-          <h2 style={{ margin: "1rem 0 10px" }}>Follow @parapr.design</h2>
+          <h2 style={{ margin: "1rem 0 10px" }}>Follow @parpar.design</h2>
         </a>
       </Inner>
       {posts && posts.length > 0 ? (
